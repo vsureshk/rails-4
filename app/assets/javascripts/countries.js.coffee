@@ -1,0 +1,15 @@
+statistic_on_load = ->  
+  $("#search").tokenfield                      
+    autocomplete:                                                                
+      source: (request, response) ->                                             
+        $.getJSON "/search_popup", search: request.term, (data) ->   
+          results = $.map(data, (site) ->                                        
+            if (site.name == null) then site.code else site.name                                       
+          )                                                                      
+          response results                                                       
+  
+### Load after document ready ###
+$(document).ready statistic_on_load
+
+### Load after page change (Because of rails4 turbo link)  ###
+$(window).bind 'page:change', statistic_on_load
